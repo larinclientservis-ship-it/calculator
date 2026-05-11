@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор регистрации компании в Румынии</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #002B7F;
+    --primary-light: #1e4ba8;
+    --accent: #FCD116;
+    --red: #CE1126;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --success: #047857;
+  }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 60%, #2e5cc5 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,43,127,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: "";
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity: 0.25;
+  }
+  header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  header p {
+    margin-top: 6px;
+    opacity: 0.92;
+    font-size: 14.5px;
+  }
+  .flag {
+    display: inline-flex;
+    height: 18px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 2px;
+    overflow: hidden;
+    vertical-align: -3px;
+    margin-right: 10px;
+  }
+  .flag span { display: block; width: 9px; height: 100%; }
+  .flag .b { background: #002B7F; }
+  .flag .y { background: #FCD116; }
+  .flag .r { background: #CE1126; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1.05fr 1.25fr;
+    gap: 22px;
+  }
+  @media (max-width: 920px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  }
+  .card h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2 .num {
+    background: var(--primary);
+    color: #fff;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .field .hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .field input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    background: #fafbfc;
+  }
+  .field input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,43,127,0.1);
+  }
+  .field input[type="number"]::-webkit-inner-spin-button { opacity: 1; }
+
+  .seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: #f1f3f8;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+  }
+  .seg label {
+    margin: 0;
+    text-align: center;
+    padding: 9px 8px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s ease;
+  }
+  .seg input[type="radio"] { display: none; }
+  .seg input[type="radio"]:checked + label {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,43,127,0.25);
+  }
+
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #fafbfc;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .switch:hover { background: #f4f6fb; }
+  .switch.active {
+    background: #eef2fb;
+    border-color: var(--primary);
+  }
+  .switch-label { font-size: 14px; font-weight: 600; }
+  .switch-price { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+  .toggle {
+    position: relative;
+    width: 42px; height: 24px;
+    background: #d1d5db;
+    border-radius: 999px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 20px; height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .switch.active .toggle { background: var(--primary); }
+  .switch.active .toggle::after { transform: translateX(18px); }
+  .switch input { display: none; }
+
+  /* Result panel */
+  .result-card {
+    background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+    position: sticky;
+    top: 16px;
+  }
+  .line-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e5e7eb;
+    gap: 10px;
+  }
+  .line-item:last-of-type { border-bottom: none; }
+  .li-name { font-size: 13.5px; color: var(--text); flex: 1; }
+  .li-detail { font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 1px; }
+  .li-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .li-zero { opacity: 0.35; }
+
+  .subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-top: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .subtotal-row.no-vat {
+    background: #f1f3f8;
+    border: 1px solid var(--border);
+  }
+  .subtotal-row.with-vat {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0,43,127,0.22);
+  }
+  .subtotal-row .lbl {
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .subtotal-row .val {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .subtotal-row.with-vat .val { font-size: 26px; }
+  .vat-note {
+    font-size: 11px;
+    opacity: 0.85;
+    display: block;
+    margin-top: 2px;
+  }
+  .payment-block {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 2px dashed var(--border);
+  }
+  .payment-block h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .pay-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .pay-row.advance {
+    border-color: var(--accent);
+    background: #fffbeb;
+  }
+  .pay-row.bank {
+    border-color: var(--success);
+    background: #ecfdf5;
+  }
+  .pay-row .pay-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .pay-row .pay-sub {
+    display: block;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .pay-row .pay-amt {
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .pay-row.advance .pay-amt { color: #b45309; }
+  .pay-row.bank .pay-amt { color: var(--success); }
+
+  .actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 16px;
+    border-radius: 9px;
+    border: 1.5px solid var(--primary);
+    background: #fff;
+    color: var(--primary);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--primary); color: #fff; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-light); }
+
+  .footer-note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: #fffbeb;
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #78350f;
+    line-height: 1.55;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .wrap { padding: 10px; max-width: 100%; }
+    header { box-shadow: none; }
+    .card { box-shadow: none; break-inside: avoid; }
+    .actions { display: none; }
+    .layout { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .result-card { position: static; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="flag"><span class="b"></span><span class="y"></span><span class="r"></span></span>Калькулятор регистрации компании в Румынии</h1>
+    <p>Расчёт стоимости услуг по регистрации SRL / открытию компании. Этап 1.</p>
+  </header>
+
+  <div class="layout">
+    <!-- LEFT: INPUTS -->
+    <div>
+      <div class="card">
+        <h2><span class="num">1</span>Параметры регистрации</h2>
+
+        <div class="field">
+          <label for="founders">Количество учредителей (участников)</label>
+          <input type="number" id="founders" min="1" max="20" value="1" step="1">
+          <div class="hint">Если есть отдельное лицо на должность администратора, считайте его как дополнительного участника.</div>
+        </div>
+
+        <div class="field">
+          <label>Способ регистрации</label>
+          <div class="seg">
+            <input type="radio" name="mode" id="mode-visit" value="visit" checked>
+            <label for="mode-visit">С приездом</label>
+            <input type="radio" name="mode" id="mode-remote" value="remote">
+            <label for="mode-remote">Удалённо</label>
+          </div>
+          <div id="remote-field-inline" style="display:none; margin-top:10px;">
+            <label for="remote-count2" style="font-size:13.5px;font-weight:600;display:block;margin-bottom:6px;">Из них удалённо (по доверенности)</label>
+            <input type="number" id="remote-count2" min="0" max="20" value="0" step="1" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-weight:500;background:#fafbfc;">
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Первый удалённый участник — 390 €, каждый следующий — +195 €.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="banks">Количество банков на открытие</label>
+          <input type="number" id="banks" min="0" max="5" value="1" step="1">
+          <div class="hint">650 € за каждый банк со счетами на компанию.</div>
+        </div>
+
+        <div class="field">
+          <label>Юридический адрес (наш, на 1 год)</label>
+          <div class="switch" id="addr-switch" onclick="toggleAddr()">
+            <div>
+              <div class="switch-label">Предоставить юр. адрес</div>
+              <div class="switch-price">Индивидуальный номер, почтовое обслуживание — 380 €</div>
+            </div>
+            <div class="toggle"></div>
+            <input type="checkbox" id="legal-addr">
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <strong>Примечание.</strong> Прайс приведён в евро без НДС. НДС в Румынии — 21%. Стоимость переводов считается за каждого участника (140 € за комплект). Аванс рассчитывается без учёта открытия банковских счетов.
+      </div>
+    </div>
+
+    <!-- RIGHT: RESULT -->
+    <div>
+      <div class="card result-card">
+        <h2><span class="num">2</span>Расчёт стоимости</h2>
+
+        <div id="breakdown">
+          <!-- line items injected here -->
+        </div>
+
+        <div class="subtotal-row no-vat">
+          <div class="lbl">Итого без НДС</div>
+          <div class="val"><span id="total-no-vat">0</span> €</div>
+        </div>
+        <div class="subtotal-row with-vat">
+          <div>
+            <div class="lbl">Итого с НДС</div>
+            <span class="vat-note">включая НДС 21%</span>
+          </div>
+          <div class="val"><span id="total-with-vat">0</span> €</div>
+        </div>
+
+        <div class="payment-block">
+          <h3>График оплаты</h3>
+          <div class="pay-row advance">
+            <div>
+              <div class="pay-title">Аванс</div>
+              <span class="pay-sub">сумма с НДС, кроме открытия банка</span>
+            </div>
+            <div class="pay-amt"><span id="advance-amt">0</span> €</div>
+          </div>
+          <div class="pay-row bank">
+            <div>
+              <div class="pay-title">Расчёт после открытия банковского счёта</div>
+              <span class="pay-sub" id="bank-sub">за открытие банков — с НДС</span>
+            </div>
+            <div class="pay-amt"><span id="bank-amt">0</span> €</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="window.print()">🖨 Печать / PDF</button>
+          <button class="btn" onclick="resetForm()">↺ Сбросить</button>
+          <button class="btn" onclick="copyResult()" id="copy-btn">📋 Скопировать смету</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRICES = {
+  base: 890,
+  translation: 140,
+  extraFounder: 180,
+  remoteFirst: 390,
+  remoteNext: 195,
+  legalAddr: 380,
+  bank: 650,
+  vatRate: 0.21
+};
+
+const $ = id => document.getElementById(id);
+
+function fmt(n) {
+  return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Math.round(n * 100) / 100);
+}
+
+function toggleAddr() {
+  const cb = $('legal-addr');
+  cb.checked = !cb.checked;
+  $('addr-switch').classList.toggle('active', cb.checked);
+  calc();
+}
+
+document.querySelectorAll('input[name="mode"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const remote = $('mode-remote').checked;
+    $('remote-field-inline').style.display = remote ? 'block' : 'none';
+    if (!remote) $('remote-count2').value = 0;
+    else if (+$('remote-count2').value === 0) $('remote-count2').value = +$('founders').value;
+    calc();
+  });
+});
+
+['founders', 'remote-count2', 'banks'].forEach(id => {
+  $(id).addEventListener('input', calc);
+});
+
+function buildLine(name, detail, value) {
+  const isZero = value === 0;
+  return `
+    <div class="line-item ${isZero ? 'li-zero' : ''}">
+      <div>
+        <div class="li-name">${name}</div>
+        ${detail ? `<span class="li-detail">${detail}</span>` : ''}
+      </div>
+      <div class="li-value">${fmt(value)} €</div>
+    </div>
+  `;
+}
+
+function calc() {
+  let founders = Math.max(1, parseInt($('founders').value) || 1);
+  $('founders').value = founders;
+
+  const remoteMode = $('mode-remote').checked;
+  let remoteCount = remoteMode ? Math.min(founders, Math.max(0, parseInt($('remote-count2').value) || 0)) : 0;
+  if (remoteMode && remoteCount > founders) {
+    remoteCount = founders;
+    $('remote-count2').value = remoteCount;
+  }
+  $('remote-count2').max = founders;
+
+  let banks = Math.max(0, parseInt($('banks').value) || 0);
+  $('banks').value = banks;
+
+  const hasAddr = $('legal-addr').checked;
+
+  const baseCost = PRICES.base;
+  const translationCost = founders * PRICES.translation;
+  const extraFoundersCount = Math.max(0, founders - 1);
+  const extraFoundersCost = extraFoundersCount * PRICES.extraFounder;
+  let remoteCost = 0;
+  if (remoteCount >= 1) {
+    remoteCost = PRICES.remoteFirst + Math.max(0, remoteCount - 1) * PRICES.remoteNext;
+  }
+  const addrCost = hasAddr ? PRICES.legalAddr : 0;
+  const bankCost = banks * PRICES.bank;
+
+  const lines = [];
+  lines.push(buildLine(
+    'Открытие компании (базовый пакет)',
+    'Резервирование имени, устав, нотариус, адвокат, переводчик',
+    baseCost
+  ));
+  lines.push(buildLine(
+    'Переводы и легализация документов',
+    `${founders} комплект${founders === 1 ? '' : (founders < 5 ? 'а' : 'ов')} × 140 €`,
+    translationCost
+  ));
+  if (extraFoundersCount > 0) {
+    lines.push(buildLine(
+      'Дополнительные учредители / администратор',
+      `${extraFoundersCount} × 180 €`,
+      extraFoundersCost
+    ));
+  }
+  if (remoteCount > 0) {
+    const extra = Math.max(0, remoteCount - 1);
+    lines.push(buildLine(
+      'Регистрация удалённо (по доверенности)',
+      `1 × 390 €${extra > 0 ? ` + ${extra} × 195 €` : ''} (всего ${remoteCount} участн.)`,
+      remoteCost
+    ));
+  }
+  if (hasAddr) {
+    lines.push(buildLine(
+      'Юридический адрес на 1 год',
+      'Индивидуальный номер, почтовое обслуживание',
+      addrCost
+    ));
+  }
+  if (banks > 0) {
+    lines.push(buildLine(
+      'Открытие банковских счетов',
+      `${banks} банк${banks === 1 ? '' : (banks < 5 ? 'а' : 'ов')} × 650 €`,
+      bankCost
+    ));
+  }
+
+  $('breakdown').innerHTML = lines.join('');
+
+  const totalNoVat = baseCost + translationCost + extraFoundersCost + remoteCost + addrCost + bankCost;
+  const totalWithVat = totalNoVat * (1 + PRICES.vatRate);
+
+  const advanceNoVat = totalNoVat - bankCost;
+  const advanceWithVat = advanceNoVat * (1 + PRICES.vatRate);
+  const bankWithVat = bankCost * (1 + PRICES.vatRate);
+
+  $('total-no-vat').textContent = fmt(totalNoVat);
+  $('total-with-vat').textContent = fmt(totalWithVat);
+  $('advance-amt').textContent = fmt(advanceWithVat);
+  $('bank-amt').textContent = fmt(bankWithVat);
+  $('bank-sub').textContent = banks > 0
+    ? `${banks} банк${banks === 1 ? '' : (banks < 5 ? 'а' : 'ов')} × 650 € + НДС`
+    : 'банки не выбраны';
+}
+
+function resetForm() {
+  $('founders').value = 1;
+  $('mode-visit').checked = true;
+  $('remote-count2').value = 0;
+  $('remote-field-inline').style.display = 'none';
+  $('banks').value = 1;
+  $('legal-addr').checked = false;
+  $('addr-switch').classList.remove('active');
+  calc();
+}
+
+function copyResult() {
+  const founders = $('founders').value;
+  const remoteMode = $('mode-remote').checked;
+  const remoteCount = $('remote-count2').value;
+  const banks = $('banks').value;
+  const hasAddr = $('legal-addr').checked;
+
+  const breakdown = Array.from(document.querySelectorAll('#breakdown .line-item:not(.li-zero)'))
+    .map(el => {
+      const name = el.querySelector('.li-name').textContent;
+      const detail = el.querySelector('.li-detail')?.textContent || '';
+      const value = el.querySelector('.li-value').textContent;
+      return `• ${name}${detail ? ' (' + detail + ')' : ''}: ${value}`;
+    }).join('\n');
+
+  const txt =
+`СМЕТА — РЕГИСТРАЦИЯ КОМПАНИИ В РУМЫНИИ
+
+Параметры:
+— Учредителей: ${founders}
+— Способ: ${remoteMode ? `удалённо (${remoteCount} из ${founders})` : 'с приездом'}
+— Банков: ${banks}
+— Юр. адрес: ${hasAddr ? 'да (наш)' : 'нет'}
+
+Состав расчёта:
+${breakdown}
+
+Итого без НДС: ${$('total-no-vat').textContent} €
+Итого с НДС (21%): ${$('total-with-vat').textContent} €
+
+Аванс (без банка, с НДС): ${$('advance-amt').textContent} €
+Расчёт после открытия банка: ${$('bank-amt').textContent} €`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = $('copy-btn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Скопировано';
+    setTimeout(() => btn.innerHTML = orig, 1800);
+  });
+}
+
+calc();
+</script>
+</body>
+</html>
